@@ -41,8 +41,11 @@ app.post("/api/notes", function (req, res){
     db.push(newNote);
     res.json(newNote);
 
-    
+
 })
+
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/db')));
 
 // Starts the server to begin listening
 // =============================================================
