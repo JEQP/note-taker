@@ -42,8 +42,8 @@ app.get("/api/notes", function (req, res) {
 
     });
     console.log("sending: " + DBJSON);
-    return res.json(DBJSON);
-    // res.sendFile(DBJSON);
+    // return res.json(DBJSON);
+    res.sendFile(DBJSON);
 });
 
 
