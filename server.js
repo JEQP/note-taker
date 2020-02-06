@@ -34,14 +34,14 @@ app.get("/", function (req, res) {
 
 
 var manipulateNotes = function () {
-let DBJSON = [];
+    let DBJSON = [];
     fs.readFile('db/db.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
         }
         console.log("data: " + data);
-        
-        DBJSON = JSON.parse(data); 
+
+        DBJSON = JSON.parse(data);
         return DBJSON// should be an array of JSON objects
     });
 
@@ -56,13 +56,13 @@ let DBJSON = [];
     app.post("/api/notes", function (req, res) {
         let newNote = req.body;
         // Give each entry a unique ID, that will continue to be unique after entries are deleted.
-        newNote.id = DBJSON.length+1;
+        newNote.id = DBJSON.length + 1;
         DBJSON.forEach(e => {
             if (newNote.id <= e.id) {
-                newNote.id = e.id +1;
+                newNote.id = e.id + 1;
             }
         });
- 
+
         DBJSON.push(newNote);
         DBStr = JSON.stringify(DBJSON); // restringifies the database so it can be stored
         console.log(DBStr);
@@ -77,20 +77,40 @@ let DBJSON = [];
     });
 
     app.delete("/api/notes/:id", function (req, res) {
-        let id = req.params.id;
-        DBJSON = DBJSON.splice(id);
-        DBStr = JSON.stringify(DBJSON);
+        let deleteID = req.params.id;
+        // let DBJSONx = [];
+        console.log("id: " + deleteID);
+        console.log("in delete json: " + DBJSON);
 
-        fs.writeFile("./db/db.json", DBStr, function (err) {
-            if (err) {
-                return console.log(err);
+
+// this forEach loop has parameters element and index. It searches on element, and deletes on index.
+        DBJSON.forEach((e, i) => {
+            console.log(e + "id: " + e.id);
+            if (e.id == deleteID) {
+                console.log(e.id + " vs " + deleteID);
+                DBJSON.splice(i, 1);
+
+                DBStr = JSON.stringify(DBJSON);
+                console.log(DBStr);
+                fs.writeFile("./db/db.json", DBStr, function (err) {
+                    console.log("file written");
+                    if (err) {
+                        return console.log(err);
+                    }
+                });
+                return res.json(DBJSON);
             }
         });
-        return res.json(DBJSON);
-    
-    })
+
+
+
+        // return res.json(DBJSON);
+
+    });
 
 }
+
+
 
 
 
