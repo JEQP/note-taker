@@ -35,11 +35,16 @@ app.get("/", function (req, res) {
 
 var manipulateNotes = function () {
     let DBJSON = [];
+
     fs.readFile('db/db.json', 'utf8', (err, data) => {
         if (err) {
             throw err;
         }
-        console.log("data: " + data);
+        else if (!data) {
+            console.log("db.json file is empty");
+            // Note data is returned as a string, not a json object
+            data = "[]";
+        }
 
         DBJSON = JSON.parse(data);
         return DBJSON// should be an array of JSON objects
@@ -83,7 +88,7 @@ var manipulateNotes = function () {
         console.log("in delete json: " + DBJSON);
 
 
-// this forEach loop has parameters element and index. It searches on element, and deletes on index.
+        // this forEach loop has parameters element and index. It searches on element, and deletes on index.
         DBJSON.forEach((e, i) => {
             console.log(e + "id: " + e.id);
             if (e.id == deleteID) {
