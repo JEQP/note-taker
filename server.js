@@ -105,6 +105,10 @@ var manipulateNotes = function () {
                 });
                 return res.json(DBJSON);
             }
+            else {
+                // If the id to be deleted does not match any in the db, this stops the query timing out (console logs an error, but it doesn't affect function)
+                return res.json(DBJSON);
+            }
         });
 
 
