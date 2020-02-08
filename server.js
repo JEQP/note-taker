@@ -52,8 +52,7 @@ var manipulateNotes = function () {
 
 
     app.get("/api/notes", function (req, res) {
-        console.log(DBJSON)
-        console.log("sending: " + DBJSON);
+
         return res.json(DBJSON);
 
     });
@@ -70,7 +69,6 @@ var manipulateNotes = function () {
 
         DBJSON.push(newNote);
         DBStr = JSON.stringify(DBJSON); // restringifies the database so it can be stored
-        console.log(DBStr);
 
         fs.writeFile("./db/db.json", DBStr, function (err) {
             if (err) {
@@ -83,20 +81,14 @@ var manipulateNotes = function () {
 
     app.delete("/api/notes/:id", function (req, res) {
         let deleteID = req.params.id;
-        // let DBJSONx = [];
-        console.log("id: " + deleteID);
-        console.log("in delete json: " + DBJSON);
-
 
         // this forEach loop has parameters element and index. It searches on element, and deletes on index.
         DBJSON.forEach((e, i) => {
-            console.log(e + "id: " + e.id);
+
             if (e.id == deleteID) {
-                console.log(e.id + " vs " + deleteID);
                 DBJSON.splice(i, 1);
 
                 DBStr = JSON.stringify(DBJSON);
-                console.log(DBStr);
                 fs.writeFile("./db/db.json", DBStr, function (err) {
                     console.log("file written");
                     if (err) {
@@ -105,10 +97,10 @@ var manipulateNotes = function () {
                 });
                 return res.json(DBJSON);
             }
-            else {
-                // If the id to be deleted does not match any in the db, this stops the query timing out (console logs an error, but it doesn't affect function)
-                return res.json(DBJSON);
-            }
+            // else {
+            //     // If the id to be deleted does not match any in the db, this stops the query timing out (console logs an error, but it doesn't affect function)
+            //     // return res.json(DBJSON);
+            // }
         });
 
 
